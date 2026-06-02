@@ -145,7 +145,7 @@ class ParticleTypography {
         
         // Adjust font size based on screen size
         const effectiveFontSize = this.width < 768 
-            ? Math.min(this.fontSize, this.width * 0.25)
+            ? Math.min(this.fontSize, this.width * 0.13)
             : Math.min(this.fontSize, this.width * 0.15);
 
         this.ctx.fillStyle = this.particleColor;
