@@ -140,12 +140,28 @@ class ParticleTypography {
         this.ctx.scale(dpr, dpr);
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        const effectiveFontSize = Math.min(this.fontSize, this.width * 0.15);
+        // Split text on small screens for better visibility
+        const textLines = this.width < 768 ? ["MASTER", "VAMSI"] : [this.text];
+        
+        // Adjust font size based on screen size
+        const effectiveFontSize = this.width < 768 
+            ? Math.min(this.fontSize, this.width * 0.25)
+            : Math.min(this.fontSize, this.width * 0.15);
+
         this.ctx.fillStyle = this.particleColor;
         this.ctx.font = `900 ${effectiveFontSize}px ${this.fontFamily}`;
         this.ctx.textAlign = "center";
         this.ctx.textBaseline = "middle";
-        this.ctx.fillText(this.text, this.width / 2, this.height / 2);
+
+        // Draw multiple lines if necessary
+        const lineHeight = effectiveFontSize * 1.1;
+        const totalHeight = lineHeight * textLines.length;
+        let startY = (this.height - totalHeight) / 2 + (lineHeight / 2);
+
+        textLines.forEach(line => {
+            this.ctx.fillText(line, this.width / 2, startY);
+            startY += lineHeight;
+        });
 
         const textCoordinates = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
         this.particles = [];
